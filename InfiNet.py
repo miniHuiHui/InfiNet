@@ -72,7 +72,7 @@ class RBF_kernel_in(nn.Module):
 
 
 class Kernel_Conv(nn.Module):
-    def __init__(self, in_channel, rank = 4, kernel_size = 7, bias = True, kernel = 'linear'):
+    def __init__(self, in_channel, rank = 7, kernel_size = 7, bias = True, kernel = 'linear'):
         super(Kernel_Conv, self).__init__()
         self.dwconv_a = nn.ModuleList(
             [nn.Conv2d(in_channel,in_channel,7,1,'same',groups = in_channel) for i in range(rank)]
@@ -219,7 +219,7 @@ class QuadraBlock1_dw(nn.Module):
         x = input + self.drop_path(x)
         return x
 
-class QuadraNet(nn.Module):
+class InfiNet(nn.Module):
     def __init__(self, in_chans=3, num_classes=1000, 
                  depths=[3, 3, 9, 3], base_dim=96, drop_path_rate=0.,
                  layer_scale_init_value=1e-6, head_init_scale=1.,
@@ -294,9 +294,9 @@ class QuadraNet(nn.Module):
         return x
 
 @register_model
-def InfiNet_v2_linear(pretrained=False,in_22k=False, **kwargs):
+def InfiNet_linear(pretrained=False,in_22k=False, **kwargs):
     s = 1.0/3.0
-    model = QuadraNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,
+    model = InfiNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,
     QuadraConv=[
         partial(Kernel_Conv),
         partial(Kernel_Conv),
@@ -308,9 +308,9 @@ def InfiNet_v2_linear(pretrained=False,in_22k=False, **kwargs):
     return model
 
 @register_model
-def InfiNet_v2_rbf(pretrained=False,in_22k=False, **kwargs):
+def InfiNet_rbf(pretrained=False,in_22k=False, **kwargs):
     s = 1.0/3.0
-    model = QuadraNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,kernel = 'RBF',
+    model = InfiNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,kernel = 'RBF',
     QuadraConv=[
         partial(Kernel_Conv),
         partial(Kernel_Conv),
@@ -322,9 +322,9 @@ def InfiNet_v2_rbf(pretrained=False,in_22k=False, **kwargs):
     return model
 
 @register_model
-def InfiNet_v2_rbf_in(pretrained=False,in_22k=False, **kwargs):
+def InfiNet_rbf_in(pretrained=False,in_22k=False, **kwargs):
     s = 1.0/3.0
-    model = QuadraNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,kernel = 'RBF_in',
+    model = InfiNet(depths=[2, 2, 18, 2], base_dim=64, block=QuadraBlock1_dw,kernel = 'RBF_in',
     QuadraConv=[
         partial(Kernel_Conv),
         partial(Kernel_Conv),
@@ -336,9 +336,9 @@ def InfiNet_v2_rbf_in(pretrained=False,in_22k=False, **kwargs):
     return model
 
 @register_model
-def InfiNet_v2_rbf_in_base(pretrained=False,in_22k=False, **kwargs):
+def InfiNet_rbf_in_base(pretrained=False,in_22k=False, **kwargs):
     s = 1.0/3.0
-    model = QuadraNet(depths=[3, 3, 21, 3], base_dim=128, block=QuadraBlock1_dw,kernel = 'RBF_in',
+    model = InfiNet(depths=[3, 3, 21, 3], base_dim=128, block=QuadraBlock1_dw,kernel = 'RBF_in',
     QuadraConv=[
         partial(Kernel_Conv),
         partial(Kernel_Conv),
@@ -350,9 +350,9 @@ def InfiNet_v2_rbf_in_base(pretrained=False,in_22k=False, **kwargs):
     return model
 
 @register_model
-def InfiNet_v2_rbf_in_small(pretrained=False,in_22k=False, **kwargs):
+def InfiNet_rbf_in_small(pretrained=False,in_22k=False, **kwargs):
     s = 1.0/3.0
-    model = QuadraNet(depths=[2, 2, 18, 2], base_dim=96, block=QuadraBlock1_dw,kernel = 'RBF_in',
+    model = InfiNet(depths=[2, 2, 18, 2], base_dim=96, block=QuadraBlock1_dw,kernel = 'RBF_in',
     QuadraConv=[
         partial(Kernel_Conv),
         partial(Kernel_Conv),
